@@ -1,0 +1,27 @@
+#!/bin/sh
+
+proxy=http://proxy.rdh.ecl.ntt.co.jp:20066
+
+if [ $# = 0 ]
+then
+  echo \$http_proxy : $http_proxy
+  echo \$https_proxy : $https_proxy
+  git config --list | grep proxy
+  exit 0
+fi
+
+if [ $1 = "on" ] 
+then
+  export http_proxy=$proxy
+  export https_proxy=$proxy
+  git config --global http.proxy $proxy
+  git config --global https.proxy $proxy
+elif [ $1 = "off" ] 
+then
+  export http_proxy=
+  export https_proxy=
+  git config --global --unset http.proxy
+  git config --global --unset https.proxy
+else
+  echo 'usage: proxy [on|off]'
+fi
